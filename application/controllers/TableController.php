@@ -10,7 +10,7 @@ class TableController extends TC_Generator_Index {
     public function indexAction() {
         $columns =  $this->getColumns()->render();
         
-        $form = new TC_Generator_Template_Form();
+        $form = new TC_Generator_Template_Form($this->getTable());
         
         $data = array(
             'field' => $columns,

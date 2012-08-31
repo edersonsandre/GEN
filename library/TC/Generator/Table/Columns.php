@@ -35,7 +35,9 @@ class TC_Generator_Table_Columns {
         
         $data = Array();
         foreach ($columns as $key => $value) {
+     
             $data[$key] = array(
+                'table' => $value['TABLE_NAME'],
                 'name' => $value['COLUMN_NAME'],
                 'primary_key' => $value['PRIMARY'],
                 'type' => $value['DATA_TYPE'],
@@ -46,6 +48,7 @@ class TC_Generator_Table_Columns {
         
         //echo "<pre>"; print_r($data); exit();
         //echo "<pre>"; print_r($columns); exit();
+        //echo "<pre>"; print_r($cols); exit();
         
         return $data;
     }

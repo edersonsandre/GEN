@@ -5,21 +5,26 @@
  *
  * @author ederson
  */
-class TC_Generator_Template_Form {
-
+class TC_Generator_Template_Form extends TC_Generator_Adapter {
+    
+    
 //    protected $_columns;
-//    public function __construct(Array $columns) {
-//        $this->renderElement($columns);
-//    }
+    public function __construct($table) {
+        $this->_class = $this->tableName($table); 
+        
+        $this->_package = "Application_Form_";
+        $this->_path = 'forms/';
+        $this->_extends = 'Twitter_Bootstrap_Form_Horizontal';
+    }
 
     public function renderElement(Array $columns) {
         $fields = array();
 
-        foreach ($columns['field'] as $field) {
+        foreach ($columns['field'] as $field) { // print_r($field);
             $addedCode = null;
             $fieldType = null;
             $referenceTableClass = null;
-            $fieldConfigs = array();
+            $configs = array();
             $validators = array();
             $filters = array();
 
@@ -36,21 +41,21 @@ class TC_Generator_Template_Form {
             if ($field['primary_key']) {
                 $fieldType = 'hidden';
 
-                $fieldsConfigs[] = '->setAttrib("class", "hidden-input")';
+                $fieldsConfigs[] = '     ->setAttrib("class", "hidden-input")';
             } elseif ($referenceTableClass) {
 
                 $addedCode = '$table' . $baseClass . ' = new ' . $referenceTableClass . '();';
 
-                $fieldConfigs[] = "->setLabel('$field[label]')";
-                $fieldConfigs[] = '->setMultiOptions(array("" => "- - Select - -") + $table' . $baseClass . '->fetchPairs())';
+                //$configs[] = "->setLabel('{$this->setLabel($field['label'])}')";
+                $configs[] = '     ->setMultiOptions(array("" => "- - Select - -") + $table' . $baseClass . '->fetchPairs())';
 
-                if ($field['is_required']) {
-                    $fieldConfigs[] = '->setRequired(true)';
+                if ($field['required']) {
+                    $configs[] = '     ->setRequired(true)';
                 }
 
-                $fieldsConfigs[] = '->setAttrib("class", "element-input")';
+                $fieldsConfigs[] = '     ->setAttrib("class", "element-input")';
             } else {
-                $fieldConfigs[] = "->setLabel('$field[name]')";
+                $configs[] = " ->setLabel('{$this->setLabel($field['name'])}')";
 
 // base on the type and type arguments, add corresponding validators and filters
                 switch ($field['type']) {
@@ -69,9 +74,9 @@ class TC_Generator_Template_Form {
                         }
                         $array = 'array(' . implode(',', $assocOptions) . ')';
                         $fieldType = 'radio';
-                        $fieldConfigs[] = '->setMultiOptions(' . $array . ')';
+                        $configs[] = '     ->setMultiOptions(' . $array . ')';
                         $validators[] = "new Zend_Validate_InArray(array('haystack' => $array))";
-                        $fieldConfigs[] = '->setSeparator(" ")';
+                        $configs[] = '     ->setSeparator(" ")';
                         break;
                     case 'tinytext':
                     case 'mediumtext':
@@ -101,7 +106,7 @@ class TC_Generator_Template_Form {
                         $validators[] = 'new Zend_Validate_StringLength(array("max" => ' . $field['length'] . '))';
                         $fieldType = 'text';
                         $filters[] = 'new Zend_Filter_StringTrim()';
-                        $fieldConfigs[] = '->setAttrib("maxlength", ' . $field['length'] . ')';
+                        $configs[] = '     ->setAttrib("maxlength", ' . $field['length'] . ')';
 
                         if ('email' === strtolower($field['name']) || 'emailaddress' === strtolower($field['name'])) {
                             $validators[] = 'new Zend_Validate_EmailAddress()';
@@ -117,41 +122,41 @@ class TC_Generator_Template_Form {
                         $filters[] = 'new Zend_Filter_StringTrim()';
 
                         if ('datetime' == $field['type'] || 'timestamp' == $field['type']) {
-                            $fieldConfigs[] = '->setValue(date("Y-m-d H:i:s"))';
+                            $configs[] = '     ->setValue(date("d/m/Y H:i:s"))';
                         } elseif ('date' == $field['type']) {
-                            $fieldConfigs[] = '->setValue(date("Y-m-d"))';
+                            $configs[] = '     ->setValue(date("d/m/Y"))';
                         } elseif ('time' == $field['type']) {
-                            $fieldConfigs[] = '->setValue(date("H:i:s"))';
+                            $configs[] = '     ->setValue(date("H:i:s"))';
                         }
                         break;
                 }
 
                 if ($field['required']) {
-                    $fieldConfigs[] = '->setRequired(true)';
+                    $configs[] = '     ->setRequired(true)';
                 }
 
-                $fieldsConfigs[] = '->setAttrib("class", "element-input")';
+                $fieldsConfigs[] = '     ->setAttrib("class", "element-input")';
             }
 
 //            if ($field['default_value']) {
-//                $fieldConfigs[] = '->setValue("' . str_replace('"', '\"', $field['default_value']) . '")';
+//                $configs[] = '->setValue("' . str_replace('"', '\"', $field['default_value']) . '")';
 //            }
 
             foreach ($validators as $validator) {
-                $fieldConfigs[] = '->addValidator(' . $validator . ')';
+                $configs[] = '     ->addValidator(' . $validator . ')';
             }
 
             foreach ($filters as $filter) {
-                $fieldConfigs[] = '->addFilter(' . $filter . ')';
+                $configs[] = '     ->addFilter(' . $filter . ')';
             }
 
-            $fieldConfigs = implode("\n                ", $fieldConfigs);
+            $configs = implode("\n                ", $configs);
 
             $fieldCode = <<<ELEMENT
-        \$this->addElement(
-            \$this->createElement('$fieldType', '{$field['name']}')
-                $fieldConfigs
-        );
+            \$this->addElement(
+                \$this->createElement('$fieldType', '{$field['name']}')
+                    $configs
+            );
 ELEMENT;
 
             if ($addedCode) {
@@ -171,8 +176,8 @@ ELEMENT;
         $fields[] = <<<CODE
         \$this->addElement(
             \$this->createElement('button', 'submit')
-                ->setLabel('Save')
-                ->setAttrib('type', 'submit')$buttonDecorators
+                  ->setLabel('Save')
+                  ->setAttrib('type', 'submit')$buttonDecorators
         );
 CODE;
 
@@ -181,32 +186,37 @@ CODE;
         $code = "
 <?php
 
-/**
- * Form definido para a tabela {$columns['name']}.
- *
- * @package 
- * @author Éderson Sandre
- * @version \$Id\$
- *
- */
-class {$columns['ClassName']} extends Zend_Form
-{
-    public function init()
-    {
-        \$this->setMethod('post')->setAttrib('class', '$columns[name]');
+    /**
+    * Form defined for the table {$columns['name']}.
+    *
+    * @package {$this->_package}
+    * @author {$this->_author}
+    * @version {$this->_version}
+    * @copyright {$this->_copyright}
+    *
+    */
+ 
+    class {$this->_package}{$this->_class}{$this->getExtends()} {
 
-            $fields
+        public function init() {
+            \$this->setMethod('post')
+                  ->setAttrib('id', 'form-".strtolower($this->_class)."')
+                  ->setDescription('{$this->_class}');
 
-        parent::init();
+                    $fields
+
+            //parent::init();
+        }
     }
-}
 ";
 
-    echo "<pre>"; exit(print_r($code));
+    //echo "<pre>"; exit(print_r($code));
 
-        $path = 'forms/';
-        @mkdir($path, 0777);
-        file_put_contents($path . 'Campanha.php', $code);
+        
+        @mkdir($this->_path, 0777);
+        $file = $this->_path.$this->_class.".php";
+        
+        file_put_contents($file, $code);
     }
 
 }

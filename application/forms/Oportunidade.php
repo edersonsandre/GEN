@@ -1,42 +1,42 @@
 
 <?php
 
-/**
- * Form definido para a tabela Campanha.
- *
- * @package 
- * @author Éderson Sandre
- * @version $Id$
- *
- */
-class Application_Form_Campanha extends Zend_Form
-{
-    public function init()
-    {
-        $this->setMethod('post')->setAttrib('class', 'Campanha');
+    /**
+    * Form defined for the table Campanha.
+    *
+    * @package Application_Form_
+    * @author Éderson Sandre
+    * @version 1.0
+    *
+    */
+ 
+    class Application_Form_Oportunidade  extends Zend_Form {
 
-                    $this->addElement(
+        public function init() {
+            $this->setMethod('post')->setAttrib('class', 'Campanha');
+
+                        $this->addElement(
             $this->createElement('hidden', 'oportunidade')
                 
         );
 
         $this->addElement(
             $this->createElement('text', 'usuario')
-                ->setLabel('usuario')
+                ->setLabel('Usuario')
                 ->addValidator(new Zend_Validate_Int())
                 ->addFilter(new Zend_Filter_StringTrim())
         );
 
         $this->addElement(
             $this->createElement('text', 'empresa_cliente')
-                ->setLabel('empresa_cliente')
+                ->setLabel('Empresa Cliente')
                 ->addValidator(new Zend_Validate_Int())
                 ->addFilter(new Zend_Filter_StringTrim())
         );
 
         $this->addElement(
             $this->createElement('text', 'empresa_sistema')
-                ->setLabel('empresa_sistema')
+                ->setLabel('Empresa Sistema')
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_Int())
                 ->addFilter(new Zend_Filter_StringTrim())
@@ -44,7 +44,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'ibge')
-                ->setLabel('ibge')
+                ->setLabel('Ibge')
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_Int())
                 ->addFilter(new Zend_Filter_StringTrim())
@@ -52,7 +52,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'titulo')
-                ->setLabel('titulo')
+                ->setLabel('Titulo')
                 ->setAttrib("maxlength", 100)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 100)))
                 ->addFilter(new Zend_Filter_StringTrim())
@@ -60,7 +60,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'origem')
-                ->setLabel('origem')
+                ->setLabel('Origem')
                 ->setAttrib("maxlength", 100)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 100)))
@@ -69,7 +69,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'setor')
-                ->setLabel('setor')
+                ->setLabel('Setor')
                 ->setAttrib("maxlength", 100)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 100)))
@@ -78,7 +78,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'telefone')
-                ->setLabel('telefone')
+                ->setLabel('Telefone')
                 ->setAttrib("maxlength", 15)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 15)))
@@ -87,7 +87,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'celular')
-                ->setLabel('celular')
+                ->setLabel('Celular')
                 ->setAttrib("maxlength", 15)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 15)))
@@ -96,7 +96,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'fax')
-                ->setLabel('fax')
+                ->setLabel('Fax')
                 ->setAttrib("maxlength", 15)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 15)))
@@ -105,7 +105,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'email')
-                ->setLabel('email')
+                ->setLabel('Email')
                 ->setAttrib("maxlength", 100)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 100)))
@@ -115,7 +115,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'endereco')
-                ->setLabel('endereco')
+                ->setLabel('Endereco')
                 ->setAttrib("maxlength", 100)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 100)))
@@ -124,7 +124,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'bairro')
-                ->setLabel('bairro')
+                ->setLabel('Bairro')
                 ->setAttrib("maxlength", 100)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 100)))
@@ -133,7 +133,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'cep')
-                ->setLabel('cep')
+                ->setLabel('Cep')
                 ->setAttrib("maxlength", 8)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 8)))
@@ -142,7 +142,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'pais')
-                ->setLabel('pais')
+                ->setLabel('Pais')
                 ->setAttrib("maxlength", 2)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 2)))
@@ -151,7 +151,7 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('text', 'idioma')
-                ->setLabel('idioma')
+                ->setLabel('Idioma')
                 ->setAttrib("maxlength", 2)
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_StringLength(array("max" => 2)))
@@ -160,15 +160,15 @@ class Application_Form_Campanha extends Zend_Form
 
         $this->addElement(
             $this->createElement('textarea', 'obs')
-                ->setLabel('obs')
+                ->setLabel('Obs')
                 ->setRequired(true)
                 ->addFilter(new Zend_Filter_StringTrim())
         );
 
         $this->addElement(
             $this->createElement('text', 'data_cadastro')
-                ->setLabel('data_cadastro')
-                ->setValue(date("Y-m-d H:i:s"))
+                ->setLabel('Data Cadastro')
+                ->setValue(date("d/m/Y H:i:s"))
                 ->setRequired(true)
                 ->addFilter(new Zend_Filter_StringTrim())
         );
@@ -179,6 +179,6 @@ class Application_Form_Campanha extends Zend_Form
                 ->setAttrib('type', 'submit')
         );
 
-        parent::init();
+            //parent::init();
+        }
     }
-}
